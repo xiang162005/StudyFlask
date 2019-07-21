@@ -215,13 +215,13 @@ class User(UserMixin, db.Model):
     def follow(self, user):
         if not self.is_following(user):
             f = Follow(follower=self, followed=user)
-            self.followed.append(f)
+            db.session.add(f)
 
     # 取消关注
     def unfollow(self, user):
         f = self.followed.filter_by(followed_id=user.id).first()
         if f:
-            self.followed.remove(f)
+            db.session.delete(f)
 
     # 判断我是否关注了他
     def is_following(self, user):
