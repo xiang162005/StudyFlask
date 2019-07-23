@@ -52,3 +52,21 @@ def test(coverage, test_names):
         COV.html_report(directory=covdir)
         print('HTML version: file://%s/index.html' % covdir)
         COV.erase()
+
+
+@app.cli.command()
+@click.option('-h', '--host', default='127.0.0.1',
+              help='The interface to bind to.')
+@click.option('-p', '--port', default=5000,
+              help='The port to bind to.')
+@click.option('--length', default=25,
+              help='Number of functions to include in the profiler report.')
+@click.option('--profile-dir', default=None,
+              help='Directory where profiler data files are saved.')
+def profile(host, port, length, profile_dir):
+    """Start the application under the code profiler."""
+    from werkzeug.serving import run_simple
+    from werkzeug.contrib.profiler import ProfilerMiddleware
+    app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[length],
+                                      profile_dir=profile_dir)
+    run_simple(host, port, app, use_debugger=False)
