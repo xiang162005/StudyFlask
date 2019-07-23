@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 import os
 
 
@@ -12,7 +14,7 @@ import sys
 import click
 from app import create_app, db
 from app.models import User, Role, Permission, Post, Comment
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
 
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
@@ -70,3 +72,16 @@ def profile(host, port, length, profile_dir):
     app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[length],
                                       profile_dir=profile_dir)
     run_simple(host, port, app, use_debugger=False)
+
+
+@manager.command
+def deploy():
+    """Run deployment tasks."""
+    # 把数据库迁移到最新修订版本
+    upgrade()
+
+    # 创建或更新用户角色
+    Role.insert_roles
+
+    # 确保所有用户都关注了他们自己
+    User.add_self_follows()
