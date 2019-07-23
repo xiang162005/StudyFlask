@@ -58,11 +58,11 @@ class ProductionConfig(Config):
             mailhost=(cls.MAIL_SERVER, cls.MAIL_PORT),
             fromaddr=cls.FLASKY_MAIL_SENDER,
             toaddrs=[cls.FLASKY_ADMIN],
-            subjects=cls.FLASKY_MAIL_SUBJECT_PREFIX + 'Application Error',
+            subject=cls.FLASKY_MAIL_SUBJECT_PREFIX + 'Application Error',
             credentials=credentials,
             secure=secure
         )
-        mail_handler.setLevle(logging.ERROR)
+        mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
 
 
@@ -87,5 +87,7 @@ config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
-    'default': DevelopmentConfig
+    'heroku': HerokuConfig,
+
+    'default': DevelopmentConfig,
 }

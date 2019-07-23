@@ -43,3 +43,6 @@ venv
 
 # coverage report
 tmp
+
+# heroku
+.env
