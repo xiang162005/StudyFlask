@@ -74,7 +74,7 @@ def profile(host, port, length, profile_dir):
     run_simple(host, port, app, use_debugger=False)
 
 
-@manager.command
+@app.cli.command()
 def deploy():
     """Run deployment tasks."""
     # 把数据库迁移到最新修订版本
